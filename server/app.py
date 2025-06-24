@@ -1,14 +1,13 @@
 from flask import Flask, request, jsonify, make_response
-from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.orm import validates  # This is the missing import
+from sqlalchemy.orm import validates
+import os
 
-# Initialize extensions
 db = SQLAlchemy()
 migrate = Migrate()
 
-# Define models
 class Hero(db.Model, SerializerMixin):
     __tablename__ = 'heroes'
     id = db.Column(db.Integer, primary_key=True)
@@ -46,16 +45,21 @@ class HeroPower(db.Model, SerializerMixin):
             raise ValueError(f"Strength must be one of: {', '.join(valid_strengths)}")
         return strength
 
-# Create Flask app
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def create_app():
+    app = Flask(__name__)
+    
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(basedir, '..', 'instance', 'app.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    db.init_app(app)
+    migrate.init_app(app, db)
+    
+    return app
 
-# Initialize extensions with app
-db.init_app(app)
-migrate.init_app(app, db)
+app = create_app()
 
-# Routes
 @app.route('/')
 def home():
     return 'Superheroes API'
@@ -70,13 +74,7 @@ def get_hero(id):
     hero = Hero.query.get(id)
     if not hero:
         return make_response(jsonify({"error": "Hero not found"}), 404)
-    
-    hero_data = hero.to_dict()
-    hero_data['hero_powers'] = [hp.to_dict() for hp in hero.hero_powers]
-    for hp in hero_data['hero_powers']:
-        hp['power'] = Power.query.get(hp['power_id']).to_dict()
-    
-    return jsonify(hero_data)
+    return jsonify(hero.to_dict())
 
 @app.route('/powers', methods=['GET'])
 def get_powers():
@@ -118,9 +116,12 @@ def create_hero_power():
         db.session.add(hero_power)
         db.session.commit()
         
+        hero = Hero.query.get(hero_power.hero_id)
+        power = Power.query.get(hero_power.power_id)
+        
         response = hero_power.to_dict()
-        response['hero'] = Hero.query.get(hero_power.hero_id).to_dict()
-        response['power'] = Power.query.get(hero_power.power_id).to_dict()
+        response['hero'] = hero.to_dict()
+        response['power'] = power.to_dict()
         
         return jsonify(response), 201
     except ValueError as e:
