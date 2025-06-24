@@ -29,132 +29,135 @@ A robust Flask REST API for managing superheroes, their powers, and the relation
    ```bash
    git clone https://github.com/yourusername/superheroes-api.git
    cd superheroes-api
-Set up virtual environment and install dependencies:
+2. Set up virtual environment and install dependencies:
 
-bash
-pipenv install
-pipenv shell
-Configure the database:
+    ```bash
+    pipenv install
+    pipenv shell
 
-bash
-# Create migrations folder
-flask db init
+3. Configure the database:
 
-# Generate initial migration
-flask db migrate -m "initial migration"
+    ```bash
+    flask db init
+    flask db migrate -m "initial migration"
+    flask db upgrade
 
-# Apply migrations
-flask db upgrade
-Seed the database with sample data:
+4. Seed the database with sample data:
 
-bash
-python server/seed.py
-Start the development server:
+    ```bash
+    python server/seed.py
 
-bash
-python server/app.py
+5. Start the development server:
+
+    ```bash
+    python server/app.py
 The API will be available at http://localhost:5555
 
-📚 API Documentation
-Endpoints
-Heroes
+# 📚 API Documentation
+## Endpoints
+### Heroes
 GET /heroes - List all heroes
 
 GET /heroes/<int:id> - Get hero details including their powers
 
-Powers
+### Powers
 GET /powers - List all powers
 
 GET /powers/<int:id> - Get power details
 
 PATCH /powers/<int:id> - Update a power's description
 
-Hero Powers
+### Hero Powers
 POST /hero_powers - Create a relationship between a hero and power
 
-Request/Response Examples
-Get All Heroes
+## Request/Response Examples
+### Get All Heroes
 
-http
+ 
 GET /heroes
+
 Response:
 
-json
-[
-  {
+    
+    [
+        {
+            "id": 1,
+            "name": "Kamala Khan",
+            "super_name": "Ms. Marvel"
+        },
+      ...
+    ]
+
+
+### Get Hero Details
+
+
+GET /heroes/1
+
+Response:
+
+    
+    {
     "id": 1,
     "name": "Kamala Khan",
-    "super_name": "Ms. Marvel"
-  },
-  ...
-]
-Get Hero Details
-
-http
-GET /heroes/1
-Response:
-
-json
-{
-  "id": 1,
-  "name": "Kamala Khan",
-  "super_name": "Ms. Marvel",
-  "hero_powers": [
-    {
-      "id": 1,
-      "hero_id": 1,
-      "power_id": 1,
-      "strength": "Strong",
-      "power": {
+    "super_name": "Ms. Marvel",
+    "hero_powers": [
+        {
         "id": 1,
-        "name": "super strength",
-        "description": "gives the wielder super-human strengths"
-      }
+        "hero_id": 1,
+        "power_id": 1,
+        "strength": "Strong",
+        "power": {
+            "id": 1,
+            "name": "super strength",
+            "description": "gives the wielder super-human strengths"
+        }
+        }
+    ]
     }
-  ]
-}
-Update Power
+### Update Power
 
-http
+
 PATCH /powers/1
+
 Content-Type: application/json
 
-{
-  "description": "Grants the wielder incredible physical strength"
-}
+    {
+        "description": "Grants the wielder incredible physical strength"
+    }
 Successful Response:
 
-json
-{
-  "id": 1,
-  "name": "super strength",
-  "description": "Grants the wielder incredible physical strength"
-}
+
+    {
+        "id": 1,
+        "name": "super strength",
+        "description": "Grants the wielder incredible physical strength"
+    }
 Error Response:
 
-json
-{
-  "errors": ["Description must be present and at least 20 characters long"]
-}
+
+    {
+        "errors": ["Description must be present and at least 20 characters long"]
+    }
 
 
 
 # 🛠️ Development
-# Project Structure
+## Project Structure
 
-superheroes/
-├── instance/           # Database files
-├── migrations/         # Database migrations
-├── server/
-│   ├── __init__.py     # Package initialization
-│   ├── app.py          # Main application and routes
-│   ├── models.py       # Database models
-│   └── seed.py         # Database seeding script
-├── .env                # Environment variables
-├── Pipfile             # Dependencies
-└── README.md           # This file
+    superheroes/
+    ├── instance/           # Database files
+    ├── migrations/         # Database migrations
+    ├── server/
+    │   ├── __init__.py     # Package initialization
+    │   ├── app.py          # Main application and routes
+    │   ├── models.py       # Database models
+    │   └── seed.py         # Database seeding script
+    ├── .env                # Environment variables
+    ├── Pipfile             # Dependencies
+    └── README.md           # This file
 
-# Testing with Postman
+## Testing with Postman
 Import the provided Postman collection
 
 Set the base URL to http://localhost:5555
@@ -162,7 +165,7 @@ Set the base URL to http://localhost:5555
 Explore all available endpoints
 
 # Database Schema
-# Diagram
+## Diagram
 
 ![alt text](image.png)
 
@@ -175,7 +178,6 @@ Flatiron School curriculum
 
 All the superheroes who inspired this project
 
-text
 
 This README includes:
 
