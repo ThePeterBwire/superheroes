@@ -139,9 +139,9 @@ json
 
 
 
-🛠️ Development
-Project Structure
-text
+# 🛠️ Development
+# Project Structure
+
 superheroes/
 ├── instance/           # Database files
 ├── migrations/         # Database migrations
@@ -153,52 +153,22 @@ superheroes/
 ├── .env                # Environment variables
 ├── Pipfile             # Dependencies
 └── README.md           # This file
-Testing with Postman
+
+# Testing with Postman
 Import the provided Postman collection
 
 Set the base URL to http://localhost:5555
 
 Explore all available endpoints
 
-Database Schema
-Diagram
+# Database Schema
+# Diagram
 
 ![alt text](image.png)
-Code
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-📜 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-🙏 Acknowledgments
+# 🙏 Acknowledgments
 Flask and SQLAlchemy teams
 
 Flatiron School curriculum
@@ -222,5 +192,3 @@ The markdown is properly formatted with:
 - Proper code block syntax
 - Clear section organization
 - Visual elements to enhance readability
-
-You can copy this directly into your README.md file - it's ready to use!
